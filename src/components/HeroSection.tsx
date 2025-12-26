@@ -1,7 +1,51 @@
 import { ArrowDown, Sparkles } from "lucide-react";
 import { Button } from "./ui/button";
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import gsap from "gsap";
+
+function TypewriterText({ text, delay = 0 }: { text: string; delay?: number }) {
+  const [displayText, setDisplayText] = useState("");
+  const [showCursor, setShowCursor] = useState(true);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      let index = 0;
+      const interval = setInterval(() => {
+        if (index <= text.length) {
+          setDisplayText(text.slice(0, index));
+          index++;
+        } else {
+          clearInterval(interval);
+          setTimeout(() => setShowCursor(false), 1000);
+        }
+      }, 100);
+      return () => clearInterval(interval);
+    }, delay);
+    return () => clearTimeout(timeout);
+  }, [text, delay]);
+
+  return (
+    <span>
+      {displayText}
+      {showCursor && <span className="animate-pulse">|</span>}
+    </span>
+  );
+}
 
 export function HeroSection() {
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    if (headlineRef.current) {
+      gsap.fromTo(
+        headlineRef.current,
+        { opacity: 0, y: 50, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power3.out", delay: 0.2 }
+      );
+    }
+  }, []);
+
   return (
     <section
       id="home"
@@ -9,34 +53,70 @@ export function HeroSection() {
     >
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-primary/10 blur-3xl animate-float" />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-accent/20 blur-3xl animate-float" style={{ animationDelay: "2s" }} />
+        <motion.div
+          className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-primary/10 blur-3xl"
+          animate={{ y: [0, -30, 0], x: [0, 20, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-accent/20 blur-3xl"
+          animate={{ y: [0, 30, 0], x: [0, -20, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-secondary/30 blur-3xl" />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           {/* Tag */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-8 animate-fade-up opacity-0" style={{ animationDelay: "0.1s", animationFillMode: "forwards" }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-8"
+          >
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-muted-foreground">Available for freelance work</span>
-          </div>
+          </motion.div>
 
-          {/* Main headline */}
-          <h1 className="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-tight mb-6 animate-fade-up opacity-0" style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}>
-            Creative
+          {/* Name with typewriter */}
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="font-display font-bold text-2xl sm:text-3xl md:text-4xl text-muted-foreground mb-4"
+          >
+            <TypewriterText text="Syeda Dua Shah" delay={500} />
+          </motion.h2>
+
+          {/* Main headline with typewriter */}
+          <h1
+            ref={headlineRef}
+            className="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-tight mb-6"
+          >
+            <span className="block text-foreground">Creative</span>
             <span className="block gradient-text animate-gradient bg-clip-text">
-              Graphic Designer
+              <TypewriterText text="Graphic Designer" delay={1800} />
             </span>
           </h1>
 
           {/* Tagline */}
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-up opacity-0" style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
+          >
             Crafting visual stories that captivate, inspire, and transform brands into unforgettable experiences.
-          </p>
+          </motion.p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up opacity-0" style={{ animationDelay: "0.4s", animationFillMode: "forwards" }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          >
             <Button
               size="lg"
               className="gradient-bg text-primary-foreground font-semibold px-8 py-6 text-lg rounded-full hover-lift glow-effect"
@@ -52,11 +132,16 @@ export function HeroSection() {
             >
               <a href="#contact">Let's Talk</a>
             </Button>
-          </div>
+          </motion.div>
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-fade-up opacity-0" style={{ animationDelay: "0.6s", animationFillMode: "forwards" }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2"
+        >
           <a
             href="#about"
             className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-300"
@@ -64,7 +149,7 @@ export function HeroSection() {
             <span className="text-sm font-medium">Scroll to explore</span>
             <ArrowDown className="w-5 h-5 animate-bounce" />
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
