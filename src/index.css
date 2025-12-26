@@ -145,8 +145,9 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    padding-right: 0.05em;
+    padding: 0.1em 0.15em;
     display: inline-block;
+    overflow: visible;
   }
 
   .gradient-bg {
