@@ -95,7 +95,7 @@ export function HeroSection() {
             className="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-tight mb-6"
           >
             <span className="block text-foreground">Creative</span>
-            <span className="block gradient-text animate-gradient bg-clip-text whitespace-nowrap">
+            <span className="block gradient-text animate-gradient bg-clip-text md:whitespace-nowrap">
               <TypewriterText text="Graphic Designer" delay={1800} />
             </span>
           </h1>
