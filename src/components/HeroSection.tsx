@@ -92,10 +92,10 @@ export function HeroSection() {
           {/* Main headline with typewriter */}
           <h1
             ref={headlineRef}
-            className="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-tight mb-6"
+            className="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.1] mb-6"
           >
             <span className="block text-foreground">Creative</span>
-            <span className="block gradient-text animate-gradient bg-clip-text md:whitespace-nowrap">
+            <span className="block gradient-text animate-gradient bg-clip-text md:whitespace-nowrap py-2">
               <TypewriterText text="Graphic Designer" delay={1800} />
             </span>
           </h1>
