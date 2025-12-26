@@ -1,4 +1,4 @@
-import { ArrowDown, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { Button } from "./ui/button";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
@@ -135,21 +135,6 @@ export function HeroSection() {
           </motion.div>
         </div>
 
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2"
-        >
-          <a
-            href="#about"
-            className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-300"
-          >
-            <span className="text-sm font-medium">Scroll to explore</span>
-            <ArrowDown className="w-5 h-5 animate-bounce" />
-          </a>
-        </motion.div>
       </div>
     </section>
   );
