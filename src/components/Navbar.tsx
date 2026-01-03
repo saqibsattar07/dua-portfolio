@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 import { Menu, X } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const navLinks = [
   { name: "Home", href: "#home" },
@@ -30,9 +31,12 @@ export function Navbar() {
       }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
-        <a href="#home" className="font-display font-bold text-2xl gradient-text flex items-center gap-1">
-          <span className="text-3xl">Dua</span>
-          <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+        <a href="#home" className="flex items-center">
+          <img 
+            src={logo} 
+            alt="Dua Logo" 
+            className="h-10 w-auto dark:invert dark:brightness-200 dark:contrast-100"
+          />
         </a>
 
         {/* Desktop Navigation */}
