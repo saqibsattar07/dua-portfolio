@@ -11,7 +11,7 @@ export function AboutSection() {
           setIsVisible(true);
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
 
     if (sectionRef.current) {
@@ -22,11 +22,7 @@ export function AboutSection() {
   }, []);
 
   return (
-    <section
-      id="about"
-      ref={sectionRef}
-      className="py-24 md:py-32 relative overflow-hidden"
-    >
+    <section id="about" ref={sectionRef} className="py-24 md:py-32 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-secondary/20 to-transparent pointer-events-none" />
 
@@ -68,17 +64,16 @@ export function AboutSection() {
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
               <p>
-                Hi there! I'm a passionate graphic designer with over 5 years of experience 
-                creating stunning visual identities for brands worldwide.
+                I am a passionate graphic designer with over 5 years of experience creating stunning visual identities
+                for brands worldwide.
               </p>
               <p>
-                I believe design is not just about making things look pretty—it's about 
-                solving problems, telling stories, and creating meaningful connections 
-                between brands and their audiences.
+                I believe design is not just about making things look pretty it's about solving problems, telling
+                stories, and creating meaningful connections between brands and their audiences.
               </p>
               <p>
-                When I'm not pushing pixels, you'll find me exploring new design trends, 
-                sipping coffee, or hunting for inspiration in the most unexpected places.
+                When I am not pushing pixels, you'll find me exploring new design trends, sipping coffee, or hunting for
+                inspiration in the most unexpected places.
               </p>
             </div>
 
@@ -94,9 +89,7 @@ export function AboutSection() {
                   className={`text-center transition-all duration-700`}
                   style={{ transitionDelay: `${400 + index * 100}ms` }}
                 >
-                  <div className="font-display font-bold text-3xl md:text-4xl gradient-text">
-                    {stat.number}
-                  </div>
+                  <div className="font-display font-bold text-3xl md:text-4xl gradient-text">{stat.number}</div>
                   <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
                 </div>
               ))}
