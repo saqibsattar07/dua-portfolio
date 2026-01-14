@@ -3,34 +3,29 @@ import { ExternalLink } from "lucide-react";
 
 const projects = [
   {
-    title: "Luxe Brand Identity",
-    category: "Branding",
-    color: "from-primary/80 to-accent/80",
-  },
-  {
-    title: "Fintech App Design",
-    category: "UI/UX",
-    color: "from-secondary to-primary/60",
-  },
-  {
-    title: "Organic Market Campaign",
+    title: "Social Media Designs",
     category: "Marketing",
-    color: "from-accent/80 to-primary/60",
+    image: "/images/portfolio-1.png",
   },
   {
-    title: "Tech Startup Website",
-    category: "Web Design",
-    color: "from-primary/60 to-secondary",
+    title: "Calendar Graphics",
+    category: "Branding",
+    image: "/images/portfolio-2.png",
   },
   {
-    title: "Fashion Editorial",
-    category: "Print",
-    color: "from-accent to-primary/80",
+    title: "Beauty Product Campaign",
+    category: "Product Design",
+    image: "/images/portfolio-3.png",
   },
   {
-    title: "Music Festival Poster",
-    category: "Illustration",
-    color: "from-primary to-accent/60",
+    title: "Automotive Ad",
+    category: "Advertising",
+    image: "/images/portfolio-4.png",
+  },
+  {
+    title: "Food & Restaurant",
+    category: "Marketing",
+    image: "/images/portfolio-5.png",
   },
 ];
 
@@ -87,16 +82,12 @@ export function PortfolioSection() {
               }`}
               style={{ transitionDelay: `${index * 100}ms` }}
             >
-              {/* Background Gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${project.color}`} />
-
-              {/* Pattern Overlay */}
-              <div className="absolute inset-0 opacity-20">
-                <div className="w-full h-full" style={{
-                  backgroundImage: `radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)`,
-                  backgroundSize: '20px 20px'
-                }} />
-              </div>
+              {/* Background Image */}
+              <img 
+                src={project.image} 
+                alt={project.title}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
 
               {/* Hover Overlay */}
               <div className="absolute inset-0 bg-foreground/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
