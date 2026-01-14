@@ -54,8 +54,8 @@ export function AboutSection() {
           >
             <span className="inline-block text-primary font-semibold mb-4">About Me</span>
             <h2 className="font-display font-bold text-4xl md:text-5xl mb-6">
-              Turning Ideas Into
-              <span className="gradient-text"> Visual Magic</span>
+              Turning Ideas Into{" "}
+              <span className="gradient-text">Visual Magic</span>
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
               <p>
