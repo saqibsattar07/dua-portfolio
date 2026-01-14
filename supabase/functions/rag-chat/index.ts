@@ -1,10 +1,86 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+// Rate limiting configuration
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 10;
+const MAX_MESSAGE_LENGTH = 1000;
+const MAX_SESSION_ID_LENGTH = 100;
+const MAX_MESSAGES_PER_SESSION = 100;
+
+// In-memory rate limiting (per instance - for basic protection)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+function getRateLimitKey(req: Request): string {
+  return req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
+         req.headers.get('x-real-ip') || 
+         'unknown';
+}
+
+function isRateLimited(key: string): { limited: boolean; remaining: number } {
+  const now = Date.now();
+  const entry = rateLimitMap.get(key);
+  
+  if (!entry || now > entry.resetTime) {
+    rateLimitMap.set(key, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return { limited: false, remaining: MAX_REQUESTS_PER_WINDOW - 1 };
+  }
+  
+  if (entry.count >= MAX_REQUESTS_PER_WINDOW) {
+    return { limited: true, remaining: 0 };
+  }
+  
+  entry.count++;
+  return { limited: false, remaining: MAX_REQUESTS_PER_WINDOW - entry.count };
+}
+
+// Clean up old rate limit entries periodically
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, entry] of rateLimitMap.entries()) {
+    if (now > entry.resetTime) {
+      rateLimitMap.delete(key);
+    }
+  }
+}, RATE_LIMIT_WINDOW_MS);
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+function validateInput(message: unknown, sessionId: unknown): { valid: boolean; error?: string } {
+  // Validate message
+  if (!message || typeof message !== 'string') {
+    return { valid: false, error: "Message must be a non-empty string" };
+  }
+  
+  const trimmedMessage = message.trim();
+  if (trimmedMessage.length < 1) {
+    return { valid: false, error: "Message cannot be empty" };
+  }
+  
+  if (trimmedMessage.length > MAX_MESSAGE_LENGTH) {
+    return { valid: false, error: `Message must be less than ${MAX_MESSAGE_LENGTH} characters` };
+  }
+  
+  // Validate sessionId
+  if (!sessionId || typeof sessionId !== 'string') {
+    return { valid: false, error: "Session ID is required" };
+  }
+  
+  const trimmedSessionId = sessionId.trim();
+  if (trimmedSessionId.length < 1 || trimmedSessionId.length > MAX_SESSION_ID_LENGTH) {
+    return { valid: false, error: `Session ID must be between 1 and ${MAX_SESSION_ID_LENGTH} characters` };
+  }
+  
+  // Basic format validation for session ID (should be UUID-like or alphanumeric)
+  if (!/^[a-zA-Z0-9-_]+$/.test(trimmedSessionId)) {
+    return { valid: false, error: "Session ID contains invalid characters" };
+  }
+  
+  return { valid: true };
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -12,11 +88,50 @@ serve(async (req) => {
   }
 
   try {
-    const { message, sessionId } = await req.json();
+    // Apply rate limiting
+    const rateLimitKey = getRateLimitKey(req);
+    const { limited, remaining } = isRateLimited(rateLimitKey);
     
-    if (!message) {
-      throw new Error("Message is required");
+    if (limited) {
+      return new Response(
+        JSON.stringify({ error: "Rate limit exceeded. Please wait before sending more messages." }),
+        { 
+          status: 429, 
+          headers: { 
+            ...corsHeaders, 
+            "Content-Type": "application/json",
+            "X-RateLimit-Remaining": "0",
+            "Retry-After": "60"
+          } 
+        }
+      );
     }
+
+    // Parse and validate input
+    let body;
+    try {
+      body = await req.json();
+    } catch {
+      return new Response(
+        JSON.stringify({ error: "Invalid JSON body" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { message, sessionId } = body;
+    
+    // Validate inputs
+    const validation = validateInput(message, sessionId);
+    if (!validation.valid) {
+      return new Response(
+        JSON.stringify({ error: validation.error }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Sanitize inputs
+    const sanitizedMessage = message.trim().substring(0, MAX_MESSAGE_LENGTH);
+    const sanitizedSessionId = sessionId.trim().substring(0, MAX_SESSION_ID_LENGTH);
 
     const OPENROUTER_API_KEY = Deno.env.get("OPENROUTER_API_KEY");
     if (!OPENROUTER_API_KEY) {
@@ -26,6 +141,19 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Check session message count to prevent flooding
+    const { count: messageCount, error: countError } = await supabase
+      .from("chat_messages")
+      .select("*", { count: "exact", head: true })
+      .eq("session_id", sanitizedSessionId);
+
+    if (!countError && messageCount !== null && messageCount >= MAX_MESSAGES_PER_SESSION) {
+      return new Response(
+        JSON.stringify({ error: "Session message limit reached. Please start a new conversation." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     // Fetch all documents for RAG context
     const { data: documents, error: docsError } = await supabase
@@ -49,7 +177,7 @@ serve(async (req) => {
     const { data: chatHistory, error: historyError } = await supabase
       .from("chat_messages")
       .select("role, content")
-      .eq("session_id", sessionId)
+      .eq("session_id", sanitizedSessionId)
       .order("created_at", { ascending: true })
       .limit(20);
 
@@ -81,7 +209,7 @@ Guidelines:
     }
 
     // Add current message
-    messages.push({ role: "user", content: message });
+    messages.push({ role: "user", content: sanitizedMessage });
 
     console.log("Calling OpenRouter API with", messages.length, "messages");
 
@@ -124,20 +252,26 @@ Guidelines:
 
     // Save messages to database
     await supabase.from("chat_messages").insert([
-      { session_id: sessionId, role: "user", content: message },
-      { session_id: sessionId, role: "assistant", content: assistantMessage },
+      { session_id: sanitizedSessionId, role: "user", content: sanitizedMessage },
+      { session_id: sanitizedSessionId, role: "assistant", content: assistantMessage },
     ]);
 
     console.log("Chat completed successfully");
 
     return new Response(
       JSON.stringify({ message: assistantMessage }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { 
+        headers: { 
+          ...corsHeaders, 
+          "Content-Type": "application/json",
+          "X-RateLimit-Remaining": remaining.toString()
+        } 
+      }
     );
   } catch (error) {
     console.error("Error in rag-chat function:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({ error: "An error occurred processing your request" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
