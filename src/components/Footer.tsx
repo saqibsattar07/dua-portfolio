@@ -1,4 +1,4 @@
-import { Heart, Mail, Phone, MapPin, Instagram, Linkedin, Dribbble, Twitter, ArrowUp, Globe } from "lucide-react";
+import { Heart, Mail, Phone, MapPin, Instagram, Linkedin, Facebook, ArrowUp } from "lucide-react";
 
 const navLinks = [
   { name: "Home", href: "#home" },
@@ -10,11 +10,9 @@ const navLinks = [
 ];
 
 const socialLinks = [
-  { name: "Instagram", href: "https://instagram.com", icon: Instagram },
-  { name: "LinkedIn", href: "https://linkedin.com", icon: Linkedin },
-  { name: "Dribbble", href: "https://dribbble.com", icon: Dribbble },
-  { name: "Behance", href: "https://behance.net", icon: Globe },
-  { name: "Twitter", href: "https://twitter.com", icon: Twitter },
+  { name: "Instagram", href: "https://www.instagram.com/dua_shafiq44", icon: Instagram },
+  { name: "Facebook", href: "https://www.facebook.com/syedadua.shah.71", icon: Facebook },
+  { name: "LinkedIn", href: "https://www.linkedin.com/in/syeda-dua-shah-aa2047321", icon: Linkedin },
 ];
 
 export function Footer() {

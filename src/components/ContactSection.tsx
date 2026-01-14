@@ -2,14 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { Mail, MapPin, Send, Instagram, Twitter, Linkedin, Dribbble } from "lucide-react";
+import { Mail, MapPin, Send, Instagram, Facebook, Linkedin } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const socialLinks = [
-  { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Dribbble, href: "#", label: "Dribbble" },
+  { icon: Instagram, href: "https://www.instagram.com/dua_shafiq44", label: "Instagram" },
+  { icon: Facebook, href: "https://www.facebook.com/syedadua.shah.71", label: "Facebook" },
+  { icon: Linkedin, href: "https://www.linkedin.com/in/syeda-dua-shah-aa2047321", label: "LinkedIn" },
 ];
 
 export function ContactSection() {
