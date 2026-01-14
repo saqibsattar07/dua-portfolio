@@ -1,21 +1,54 @@
 import { useEffect, useRef, useState } from "react";
-import { Quote } from "lucide-react";
+import { Quote, Star } from "lucide-react";
 
 const testimonials = [
   {
-    quote: "Working with this designer was an absolute pleasure. They understood our vision perfectly and delivered beyond expectations.",
-    author: "Sarah Mitchell",
-    role: "CEO, TechVentures",
+    quote: "Muhammad delivered exceptional social media designs for our restaurant campaign. His creativity and quick turnaround were impressive. The engagement on our posts increased by 40%!",
+    author: "Ahmed Khan",
+    role: "Owner, Karachi Bites Restaurant",
+    rating: 5,
+    avatar: "AK",
+    date: "2 weeks ago",
   },
   {
-    quote: "Incredible attention to detail and creative vision. Our brand has never looked better. Highly recommended!",
-    author: "James Rodriguez",
-    role: "Founder, Luxe Co",
+    quote: "The travel poster designs were stunning! Our Baku trip campaign got so much attention. Very professional communication and understood exactly what we needed.",
+    author: "Fatima Malik",
+    role: "Marketing Manager, Dimension Travels",
+    rating: 5,
+    avatar: "FM",
+    date: "1 month ago",
   },
   {
-    quote: "The design transformed our entire digital presence. Professional, creative, and always delivering on time.",
-    author: "Emily Chen",
-    role: "Marketing Director, StartupXYZ",
+    quote: "Brilliant work on our solar panel promotional materials. Clean, professional design that helped us close more deals. Will definitely work together again!",
+    author: "Hassan Ali",
+    role: "Director, Solar Square Pakistan",
+    rating: 5,
+    avatar: "HA",
+    date: "3 weeks ago",
+  },
+  {
+    quote: "The real estate listing designs were exactly what we needed - modern and eye-catching. Got more inquiries on properties with his designs. Highly recommend!",
+    author: "Sarah Ahmed",
+    role: "Real Estate Agent, Downtown Realty",
+    rating: 5,
+    avatar: "SA",
+    date: "1 month ago",
+  },
+  {
+    quote: "Amazing food photography and social media post designs. Our Pizza Hut franchise saw a significant boost in orders after using his creatives.",
+    author: "Bilal Hussain",
+    role: "Franchise Owner, Pizza Hut Lahore",
+    rating: 5,
+    avatar: "BH",
+    date: "2 months ago",
+  },
+  {
+    quote: "Very talented designer! Created beautiful beauty product ads for our skincare line. The aesthetic matched our brand perfectly. Fast delivery and great communication.",
+    author: "Ayesha Tariq",
+    role: "Founder, NikSkin Beauty",
+    rating: 5,
+    avatar: "AT",
+    date: "1 month ago",
   },
 ];
 
@@ -65,33 +98,48 @@ export function TestimonialsSection() {
         </div>
 
         {/* Testimonials Grid */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((testimonial, index) => (
             <div
               key={testimonial.author}
-              className={`glass-card rounded-2xl p-8 hover-lift transition-all duration-500 ${
+              className={`glass-card rounded-2xl p-6 hover-lift transition-all duration-500 ${
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
-              style={{ transitionDelay: `${index * 150}ms` }}
+              style={{ transitionDelay: `${index * 100}ms` }}
             >
-              {/* Quote Icon */}
-              <div className="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center mb-6">
-                <Quote className="w-6 h-6 text-primary-foreground" />
+              {/* Header with Avatar and Info */}
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm shrink-0">
+                  {testimonial.avatar}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-display font-semibold text-foreground truncate">
+                    {testimonial.author}
+                  </div>
+                  <div className="text-xs text-muted-foreground truncate">
+                    {testimonial.role}
+                  </div>
+                </div>
+              </div>
+
+              {/* Stars */}
+              <div className="flex gap-1 mb-3">
+                {[...Array(testimonial.rating)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                ))}
               </div>
 
               {/* Quote Text */}
-              <p className="text-foreground text-lg leading-relaxed mb-6">
+              <p className="text-foreground/90 text-sm leading-relaxed mb-4">
                 "{testimonial.quote}"
               </p>
 
-              {/* Author */}
-              <div>
-                <div className="font-display font-semibold text-foreground">
-                  {testimonial.author}
+              {/* Date */}
+              <div className="flex items-center justify-between">
+                <div className="text-xs text-muted-foreground">
+                  {testimonial.date}
                 </div>
-                <div className="text-sm text-muted-foreground">
-                  {testimonial.role}
-                </div>
+                <Quote className="w-4 h-4 text-primary/40" />
               </div>
             </div>
           ))}
