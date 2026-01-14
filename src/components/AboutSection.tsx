@@ -59,7 +59,7 @@ export function AboutSection() {
             </h2>
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
               <p>
-                I am a passionate graphic designer with over 5 years of experience creating stunning visual identities
+                I am a passionate graphic designer with over 3 years of experience creating stunning visual identities
                 for brands worldwide.
               </p>
               <p>
@@ -75,8 +75,8 @@ export function AboutSection() {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 mt-10">
               {[
-                { number: "5+", label: "Years Experience" },
-                { number: "100+", label: "Projects Done" },
+                { number: "3+", label: "Years Experience" },
+                { number: "70+", label: "Projects Done" },
                 { number: "50+", label: "Happy Clients" },
               ].map((stat, index) => (
                 <div
