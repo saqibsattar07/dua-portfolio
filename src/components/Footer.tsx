@@ -84,12 +84,12 @@ export function Footer() {
           <div>
             <h4 className="font-display font-semibold text-foreground mb-6">Get in Touch</h4>
             <ul className="space-y-4">
-              <li className="flex items-start gap-3">
+          <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm text-muted-foreground">Email</p>
-                  <a href="mailto:hello@duashah.com" className="text-sm text-foreground hover:text-primary transition-colors">
-                    hello@duashah.com
+                  <a href="mailto:sduashah17@gmail.com" className="text-sm text-foreground hover:text-primary transition-colors">
+                    sduashah17@gmail.com
                   </a>
                 </div>
               </li>
@@ -97,8 +97,8 @@ export function Footer() {
                 <Phone className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm text-muted-foreground">Phone</p>
-                  <a href="tel:+1234567890" className="text-sm text-foreground hover:text-primary transition-colors">
-                    +1 (234) 567-890
+                  <a href="tel:+923172938921" className="text-sm text-foreground hover:text-primary transition-colors">
+                    +92 317 293 8921
                   </a>
                 </div>
               </li>
@@ -107,8 +107,7 @@ export function Footer() {
                 <div>
                   <p className="text-sm text-muted-foreground">Location</p>
                   <p className="text-sm text-foreground">
-                    New York, NY 10001<br />
-                    United States
+                    Karachi, Pakistan
                   </p>
                 </div>
               </li>
