@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Palette, PenTool, Figma, Layout, Brush, Layers } from "lucide-react";
+import { 
+  Palette, 
+  PenTool, 
+  Figma, 
+  Layout, 
+  Brush,
+  Layers
+} from "lucide-react";
 
 const skills = [
   {
@@ -45,7 +52,7 @@ export function SkillsSection() {
           setIsVisible(true);
         }
       },
-      { threshold: 0.1 },
+      { threshold: 0.1 }
     );
 
     if (sectionRef.current) {
@@ -56,7 +63,11 @@ export function SkillsSection() {
   }, []);
 
   return (
-    <section id="skills" ref={sectionRef} className="py-24 md:py-32 relative bg-muted/30">
+    <section
+      id="skills"
+      ref={sectionRef}
+      className="py-24 md:py-32 relative bg-muted/30"
+    >
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-primary/5 blur-3xl" />
@@ -70,7 +81,7 @@ export function SkillsSection() {
           }`}
         >
           <span className="inline-block text-primary font-semibold mb-4">Skills & Tools</span>
-          <h2 className="font-display font-bold text-4xl md:text-5xl mb-7">
+          <h2 className="font-display font-bold text-4xl md:text-5xl mb-6">
             What I <span className="gradient-text">Bring to the Table</span>
           </h2>
           <p className="text-muted-foreground text-lg">
@@ -97,7 +108,9 @@ export function SkillsSection() {
               <h3 className="font-display font-bold text-xl mb-3 group-hover:gradient-text transition-all duration-300">
                 {skill.title}
               </h3>
-              <p className="text-muted-foreground leading-relaxed">{skill.description}</p>
+              <p className="text-muted-foreground leading-relaxed">
+                {skill.description}
+              </p>
             </div>
           ))}
         </div>
