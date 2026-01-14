@@ -3,12 +3,31 @@ import { Quote, Star } from "lucide-react";
 
 const testimonials = [
   {
+    quote: "Hired Muhammad for our restaurant's social media rebrand and couldn't be happier! His designs are eye-catching and professional. Saw a 35% increase in our Instagram engagement within the first month.",
+    author: "Michael Thompson",
+    role: "Owner, The Rustic Table - Austin, TX",
+    rating: 5,
+    avatar: "MT",
+    date: "1 week ago",
+    location: "🇺🇸",
+  },
+  {
     quote: "Muhammad delivered exceptional social media designs for our restaurant campaign. His creativity and quick turnaround were impressive. The engagement on our posts increased by 40%!",
     author: "Ahmed Khan",
     role: "Owner, Karachi Bites Restaurant",
     rating: 5,
     avatar: "AK",
     date: "2 weeks ago",
+    location: "🇵🇰",
+  },
+  {
+    quote: "Outstanding work on our real estate marketing materials! Muhammad created stunning property listings that helped us sell 3 homes above asking price. Highly professional and responsive.",
+    author: "Jennifer Davis",
+    role: "Realtor, Keller Williams - Miami, FL",
+    rating: 5,
+    avatar: "JD",
+    date: "3 weeks ago",
+    location: "🇺🇸",
   },
   {
     quote: "The travel poster designs were stunning! Our Baku trip campaign got so much attention. Very professional communication and understood exactly what we needed.",
@@ -17,6 +36,7 @@ const testimonials = [
     rating: 5,
     avatar: "FM",
     date: "1 month ago",
+    location: "🇵🇰",
   },
   {
     quote: "Brilliant work on our solar panel promotional materials. Clean, professional design that helped us close more deals. Will definitely work together again!",
@@ -25,14 +45,7 @@ const testimonials = [
     rating: 5,
     avatar: "HA",
     date: "3 weeks ago",
-  },
-  {
-    quote: "The real estate listing designs were exactly what we needed - modern and eye-catching. Got more inquiries on properties with his designs. Highly recommend!",
-    author: "Sarah Ahmed",
-    role: "Real Estate Agent, Downtown Realty",
-    rating: 5,
-    avatar: "SA",
-    date: "1 month ago",
+    location: "🇵🇰",
   },
   {
     quote: "Amazing food photography and social media post designs. Our Pizza Hut franchise saw a significant boost in orders after using his creatives.",
@@ -41,14 +54,7 @@ const testimonials = [
     rating: 5,
     avatar: "BH",
     date: "2 months ago",
-  },
-  {
-    quote: "Very talented designer! Created beautiful beauty product ads for our skincare line. The aesthetic matched our brand perfectly. Fast delivery and great communication.",
-    author: "Ayesha Tariq",
-    role: "Founder, NikSkin Beauty",
-    rating: 5,
-    avatar: "AT",
-    date: "1 month ago",
+    location: "🇵🇰",
   },
 ];
 
@@ -113,8 +119,11 @@ export function TestimonialsSection() {
                   {testimonial.avatar}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="font-display font-semibold text-foreground truncate">
-                    {testimonial.author}
+                  <div className="flex items-center gap-2">
+                    <span className="font-display font-semibold text-foreground truncate">
+                      {testimonial.author}
+                    </span>
+                    <span className="text-sm">{testimonial.location}</span>
                   </div>
                   <div className="text-xs text-muted-foreground truncate">
                     {testimonial.role}
