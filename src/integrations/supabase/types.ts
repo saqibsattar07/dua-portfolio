@@ -59,6 +59,30 @@ export type Database = {
         }
         Relationships: []
       }
+      session_owners: {
+        Row: {
+          created_at: string
+          last_active: string
+          message_count: number
+          owner_fingerprint: string
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          last_active?: string
+          message_count?: number
+          owner_fingerprint: string
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          last_active?: string
+          message_count?: number
+          owner_fingerprint?: string
+          session_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

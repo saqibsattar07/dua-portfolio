@@ -6,7 +6,9 @@ const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
 const MAX_REQUESTS_PER_WINDOW = 10;
 const MAX_MESSAGE_LENGTH = 1000;
 const MAX_SESSION_ID_LENGTH = 100;
+const MAX_FINGERPRINT_LENGTH = 64;
 const MAX_MESSAGES_PER_SESSION = 100;
+const SESSION_EXPIRY_HOURS = 24;
 
 // In-memory rate limiting (per instance - for basic protection)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -49,7 +51,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-function validateInput(message: unknown, sessionId: unknown): { valid: boolean; error?: string } {
+function validateInput(message: unknown, sessionId: unknown, fingerprint: unknown): { valid: boolean; error?: string } {
   // Validate message
   if (!message || typeof message !== 'string') {
     return { valid: false, error: "Message must be a non-empty string" };
@@ -78,8 +80,37 @@ function validateInput(message: unknown, sessionId: unknown): { valid: boolean; 
   if (!/^[a-zA-Z0-9-_]+$/.test(trimmedSessionId)) {
     return { valid: false, error: "Session ID contains invalid characters" };
   }
+
+  // Validate fingerprint
+  if (!fingerprint || typeof fingerprint !== 'string') {
+    return { valid: false, error: "Fingerprint is required" };
+  }
+
+  const trimmedFingerprint = fingerprint.trim();
+  if (trimmedFingerprint.length < 8 || trimmedFingerprint.length > MAX_FINGERPRINT_LENGTH) {
+    return { valid: false, error: "Invalid fingerprint" };
+  }
+
+  // Fingerprint should be alphanumeric
+  if (!/^[a-zA-Z0-9]+$/.test(trimmedFingerprint)) {
+    return { valid: false, error: "Fingerprint contains invalid characters" };
+  }
   
   return { valid: true };
+}
+
+// Generate a simple hash for fingerprinting
+function hashFingerprint(fingerprint: string, ip: string): string {
+  // Combine fingerprint with IP for additional security
+  const combined = `${fingerprint}-${ip}`;
+  // Simple hash - in production you might want a stronger hash
+  let hash = 0;
+  for (let i = 0; i < combined.length; i++) {
+    const char = combined.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash).toString(16);
 }
 
 serve(async (req) => {
@@ -89,8 +120,8 @@ serve(async (req) => {
 
   try {
     // Apply rate limiting
-    const rateLimitKey = getRateLimitKey(req);
-    const { limited, remaining } = isRateLimited(rateLimitKey);
+    const clientIp = getRateLimitKey(req);
+    const { limited, remaining } = isRateLimited(clientIp);
     
     if (limited) {
       return new Response(
@@ -118,10 +149,10 @@ serve(async (req) => {
       );
     }
 
-    const { message, sessionId } = body;
+    const { message, sessionId, fingerprint } = body;
     
-    // Validate inputs
-    const validation = validateInput(message, sessionId);
+    // Validate inputs including fingerprint
+    const validation = validateInput(message, sessionId, fingerprint);
     if (!validation.valid) {
       return new Response(
         JSON.stringify({ error: validation.error }),
@@ -132,6 +163,7 @@ serve(async (req) => {
     // Sanitize inputs
     const sanitizedMessage = message.trim().substring(0, MAX_MESSAGE_LENGTH);
     const sanitizedSessionId = sessionId.trim().substring(0, MAX_SESSION_ID_LENGTH);
+    const ownerFingerprint = hashFingerprint(fingerprint.trim(), clientIp);
 
     const OPENROUTER_API_KEY = Deno.env.get("OPENROUTER_API_KEY");
     if (!OPENROUTER_API_KEY) {
@@ -142,17 +174,72 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Check session message count to prevent flooding
-    const { count: messageCount, error: countError } = await supabase
-      .from("chat_messages")
-      .select("*", { count: "exact", head: true })
-      .eq("session_id", sanitizedSessionId);
+    // Check session ownership
+    const { data: existingSession, error: sessionError } = await supabase
+      .from("session_owners")
+      .select("*")
+      .eq("session_id", sanitizedSessionId)
+      .single();
 
-    if (!countError && messageCount !== null && messageCount >= MAX_MESSAGES_PER_SESSION) {
-      return new Response(
-        JSON.stringify({ error: "Session message limit reached. Please start a new conversation." }),
-        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    if (sessionError && sessionError.code !== "PGRST116") {
+      // PGRST116 = no rows returned, which is fine for new sessions
+      console.error("Error checking session:", sessionError);
+    }
+
+    if (existingSession) {
+      // Validate ownership - the fingerprint must match
+      if (existingSession.owner_fingerprint !== ownerFingerprint) {
+        return new Response(
+          JSON.stringify({ error: "Session access denied. Please start a new conversation." }),
+          { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // Check session expiry
+      const lastActive = new Date(existingSession.last_active);
+      const now = new Date();
+      const hoursSinceActive = (now.getTime() - lastActive.getTime()) / (1000 * 60 * 60);
+      
+      if (hoursSinceActive > SESSION_EXPIRY_HOURS) {
+        return new Response(
+          JSON.stringify({ error: "Session expired. Please start a new conversation." }),
+          { status: 410, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // Check per-session message limit
+      if (existingSession.message_count >= MAX_MESSAGES_PER_SESSION) {
+        return new Response(
+          JSON.stringify({ error: "Session message limit reached. Please start a new conversation." }),
+          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // Update session activity and message count
+      await supabase
+        .from("session_owners")
+        .update({ 
+          last_active: new Date().toISOString(),
+          message_count: existingSession.message_count + 2 // user + assistant
+        })
+        .eq("session_id", sanitizedSessionId);
+    } else {
+      // Create new session owner record
+      const { error: createError } = await supabase
+        .from("session_owners")
+        .insert({
+          session_id: sanitizedSessionId,
+          owner_fingerprint: ownerFingerprint,
+          message_count: 2 // first exchange
+        });
+
+      if (createError) {
+        console.error("Error creating session:", createError);
+        return new Response(
+          JSON.stringify({ error: "Failed to initialize session" }),
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
     }
 
     // Fetch all documents for RAG context
@@ -173,7 +260,7 @@ serve(async (req) => {
         .join("\n\n---\n\n");
     }
 
-    // Fetch recent chat history for this session
+    // Fetch recent chat history for this session (already validated ownership above)
     const { data: chatHistory, error: historyError } = await supabase
       .from("chat_messages")
       .select("role, content")

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Loader2, Bot, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,22 +12,55 @@ interface Message {
   content: string;
 }
 
+// Generate a browser fingerprint for session ownership
+function generateFingerprint(): string {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    ctx.textBaseline = 'top';
+    ctx.font = '14px Arial';
+    ctx.fillText('fingerprint', 2, 2);
+  }
+  
+  const components = [
+    navigator.userAgent,
+    navigator.language,
+    screen.width,
+    screen.height,
+    screen.colorDepth,
+    new Date().getTimezoneOffset(),
+    canvas.toDataURL(),
+    navigator.hardwareConcurrency || 0,
+  ];
+  
+  // Simple hash function
+  const str = components.join('|');
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash).toString(16).padStart(8, '0');
+}
+
 export function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId] = useState(() => crypto.randomUUID());
+  const [fingerprint] = useState(() => generateFingerprint());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +78,7 @@ export function ChatBot() {
 
     try {
       const { data, error } = await supabase.functions.invoke("rag-chat", {
-        body: { message: userMessage.content, sessionId },
+        body: { message: userMessage.content, sessionId, fingerprint },
       });
 
       if (error) throw error;
