@@ -27,6 +27,41 @@ const projects = [
     category: "Marketing",
     image: "/images/portfolio-5.png",
   },
+  {
+    title: "Pizza Hut Campaign",
+    category: "Food & Beverage",
+    image: "/images/portfolio-6.jpeg",
+  },
+  {
+    title: "Delicious Pizza",
+    category: "Food & Beverage",
+    image: "/images/portfolio-7.jpeg",
+  },
+  {
+    title: "Travel - Baku",
+    category: "Travel",
+    image: "/images/portfolio-8.jpeg",
+  },
+  {
+    title: "Solar Energy",
+    category: "Technology",
+    image: "/images/portfolio-9.jpeg",
+  },
+  {
+    title: "Balme Brand",
+    category: "Branding",
+    image: "/images/portfolio-10.jpeg",
+  },
+  {
+    title: "Real Estate Listing",
+    category: "Real Estate",
+    image: "/images/portfolio-11.jpeg",
+  },
+  {
+    title: "Tasty Bite Restaurant",
+    category: "Food & Beverage",
+    image: "/images/portfolio-12.jpeg",
+  },
 ];
 
 export function PortfolioSection() {
