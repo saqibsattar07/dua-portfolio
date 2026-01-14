@@ -35,16 +35,11 @@ export function AboutSection() {
             }`}
           >
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden glass-card p-2">
-              <div className="absolute inset-2 rounded-2xl overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-primary/20 via-accent/20 to-secondary/30 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-32 h-32 mx-auto rounded-full gradient-bg mb-4 flex items-center justify-center">
-                      <span className="font-display font-bold text-5xl text-primary-foreground">A</span>
-                    </div>
-                    <p className="text-muted-foreground text-sm">Your Photo Here</p>
-                  </div>
-                </div>
-              </div>
+              <img 
+                src="/images/dua.jpeg" 
+                alt="Graphic Designer" 
+                className="absolute inset-2 w-[calc(100%-1rem)] h-[calc(100%-1rem)] object-cover rounded-2xl"
+              />
             </div>
             {/* Decorative elements */}
             <div className="absolute -top-4 -right-4 w-24 h-24 rounded-full gradient-bg opacity-20 blur-2xl" />
