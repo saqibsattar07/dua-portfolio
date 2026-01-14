@@ -35,9 +35,9 @@ export function AboutSection() {
             }`}
           >
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden glass-card p-2">
-              <img 
-                src="/images/dua.jpeg" 
-                alt="Graphic Designer" 
+              <img
+                src="/images/dua.jpeg"
+                alt="Graphic Designer"
                 className="absolute inset-2 w-[calc(100%-1rem)] h-[calc(100%-1rem)] object-cover rounded-2xl"
               />
             </div>
