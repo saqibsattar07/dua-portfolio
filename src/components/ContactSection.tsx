@@ -22,7 +22,7 @@ export function ContactSection() {
           setIsVisible(true);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (sectionRef.current) {
@@ -41,11 +41,7 @@ export function ContactSection() {
   };
 
   return (
-    <section
-      id="contact"
-      ref={sectionRef}
-      className="py-24 md:py-32 relative"
-    >
+    <section id="contact" ref={sectionRef} className="py-24 md:py-32 relative">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] rounded-full bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 blur-3xl" />
@@ -85,7 +81,7 @@ export function ContactSection() {
                   <div>
                     <div className="text-sm text-muted-foreground mb-1">Email</div>
                     <a href="mailto:hello@designer.com" className="font-medium hover:text-primary transition-colors">
-                      hello@designer.com
+                      sduashah17@gmail.com
                     </a>
                   </div>
                 </div>
@@ -96,7 +92,7 @@ export function ContactSection() {
                   </div>
                   <div>
                     <div className="text-sm text-muted-foreground mb-1">Location</div>
-                    <div className="font-medium">San Francisco, CA</div>
+                    <div className="font-medium">Karachi, Pakistan</div>
                   </div>
                 </div>
               </div>
