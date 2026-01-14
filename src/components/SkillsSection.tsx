@@ -70,7 +70,7 @@ export function SkillsSection() {
           }`}
         >
           <span className="inline-block text-primary font-semibold mb-4">Skills & Tools</span>
-          <h2 className="font-display font-bold text-4xl md:text-5xl mb-7">
+          <h2 className="font-display font-bold text-4xl md:text-5xl mb-10">
             What I <span className="gradient-text">Bring to the Table</span>
           </h2>
           <p className="text-muted-foreground text-lg">
