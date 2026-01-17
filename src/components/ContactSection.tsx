@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { Mail, MapPin, Send, Instagram, Facebook, Linkedin } from "lucide-react";
+import { Mail, MapPin, Send, Instagram, Facebook, Linkedin, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+
+const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxpxo9Zqa86Kr0NPb9lieW692mqcVFv5xW3eBMS7g3zyAXI1l53ezkg2JFw8OOvIeRs/exec";
 
 const socialLinks = [
   { icon: Instagram, href: "https://www.instagram.com/dua_shafiq44", label: "Instagram" },
@@ -14,6 +16,13 @@ const socialLinks = [
 export function ContactSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -32,12 +41,43 @@ export function ContactSection() {
     return () => observer.disconnect();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Message sent!",
-      description: "Thank you for reaching out. I'll get back to you soon!",
-    });
+    setIsSubmitting(true);
+
+    try {
+      await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          timestamp: new Date().toISOString(),
+        }),
+      });
+
+      toast({
+        title: "Message sent!",
+        description: "Thank you for reaching out. I'll get back to you soon!",
+      });
+
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -132,8 +172,11 @@ export function ContactSection() {
                     <Input
                       id="name"
                       placeholder="Your name"
+                      value={formData.name}
+                      onChange={handleInputChange}
                       className="bg-background/50 border-border focus:border-primary rounded-xl h-12"
                       required
+                      disabled={isSubmitting}
                     />
                   </div>
                   <div>
@@ -144,8 +187,11 @@ export function ContactSection() {
                       id="email"
                       type="email"
                       placeholder="your@email.com"
+                      value={formData.email}
+                      onChange={handleInputChange}
                       className="bg-background/50 border-border focus:border-primary rounded-xl h-12"
                       required
+                      disabled={isSubmitting}
                     />
                   </div>
                 </div>
@@ -157,8 +203,11 @@ export function ContactSection() {
                   <Input
                     id="subject"
                     placeholder="Project inquiry"
+                    value={formData.subject}
+                    onChange={handleInputChange}
                     className="bg-background/50 border-border focus:border-primary rounded-xl h-12"
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -169,8 +218,11 @@ export function ContactSection() {
                   <Textarea
                     id="message"
                     placeholder="Tell me about your project..."
+                    value={formData.message}
+                    onChange={handleInputChange}
                     className="bg-background/50 border-border focus:border-primary rounded-xl min-h-[140px] resize-none"
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -178,9 +230,14 @@ export function ContactSection() {
                   type="submit"
                   size="lg"
                   className="w-full gradient-bg text-primary-foreground font-semibold rounded-xl h-12 hover-lift glow-effect"
+                  disabled={isSubmitting}
                 >
-                  <Send className="w-4 h-4 mr-2" />
-                  Send Message
+                  {isSubmitting ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4 mr-2" />
+                  )}
+                  {isSubmitting ? "Sending..." : "Send Message"}
                 </Button>
               </div>
             </form>
