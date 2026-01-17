@@ -12,8 +12,14 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Google Sheets webhook URL - stored server-side
-const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxpxo9Zqa86Kr0NPb9lieW692mqcVFv5xW3eBMS7g3zyAXI1l53ezkg2JFw8OOvIeRs/exec";
+// Google Sheets webhook URL - loaded from environment
+function getWebhookUrl(): string {
+  const url = Deno.env.get("GOOGLE_SHEETS_WEBHOOK_URL");
+  if (!url) {
+    throw new Error("GOOGLE_SHEETS_WEBHOOK_URL is not configured");
+  }
+  return url;
+}
 
 function getRateLimitKey(req: Request): string {
   return req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
@@ -157,7 +163,8 @@ serve(async (req) => {
     console.log("Submitting contact form for:", sanitizedData.email);
 
     // Forward to Google Sheets webhook
-    const response = await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+    const webhookUrl = getWebhookUrl();
+    const response = await fetch(webhookUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
