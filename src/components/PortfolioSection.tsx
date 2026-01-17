@@ -141,15 +141,10 @@ export function PortfolioSection() {
                   <h3 className="font-display font-bold text-2xl text-background mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
                     {project.title}
                   </h3>
-                  <a 
-                    href={project.image} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-background/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200 hover:text-background"
-                  >
+                  <div className="flex items-center gap-2 text-background/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
                     <span className="text-sm font-medium">View Project</span>
                     <ExternalLink className="w-4 h-4" />
-                  </a>
+                  </div>
                 </div>
               </div>
             </div>

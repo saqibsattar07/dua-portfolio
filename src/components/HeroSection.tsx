@@ -49,7 +49,7 @@ export function HeroSection() {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-28 md:pt-28 lg:pt-24 pb-20 md:pb-20"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-28 md:pt-28 lg:pt-24"
     >
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
