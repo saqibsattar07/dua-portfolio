@@ -1,4 +1,5 @@
 import { Heart, Mail, Phone, MapPin, Instagram, Linkedin, Facebook, ArrowUp } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const navLinks = [
   { name: "Home", href: "#home" },
@@ -27,9 +28,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand & Description */}
           <div className="lg:col-span-1">
-            <a href="#home" className="font-display font-bold text-2xl gradient-text flex items-center gap-1 mb-4">
-              <span className="text-3xl">Dua</span>
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <a href="#home" className="flex items-center mb-4">
+              <img src={logo} alt="Dua Logo" className="h-12 w-auto" />
             </a>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
               Creative graphic designer passionate about crafting beautiful, meaningful designs that tell stories and connect brands with their audiences.
