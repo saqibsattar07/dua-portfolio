@@ -41,7 +41,7 @@ export function HeroSection() {
       gsap.fromTo(
         headlineRef.current,
         { opacity: 0, y: 50, scale: 0.95 },
-        { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power3.out", delay: 0.2 }
+        { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power3.out", delay: 0.2 },
       );
     }
   }, []);
@@ -92,7 +92,7 @@ export function HeroSection() {
           {/* Main headline with typewriter */}
           <h1
             ref={headlineRef}
-            className="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.1] mb-6 overflow-visible"
+            className="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-7xl leading-[1.1] mb-6 overflow-visible"
           >
             <span className="block text-foreground">Creative</span>
             <span className="block gradient-text animate-gradient bg-clip-text py-2 overflow-visible">
@@ -134,7 +134,6 @@ export function HeroSection() {
             </Button>
           </motion.div>
         </div>
-
       </div>
     </section>
   );
