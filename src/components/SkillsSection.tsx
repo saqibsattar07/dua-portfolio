@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { 
   Palette, 
   PenTool, 
-  Figma, 
   Layout, 
   Brush,
-  Layers
+  Layers,
+  Megaphone
 } from "lucide-react";
 
 const skills = [
@@ -15,19 +15,19 @@ const skills = [
     description: "Creating memorable visual identities that resonate with audiences",
   },
   {
-    icon: Layout,
-    title: "UI/UX Design",
-    description: "Designing intuitive and beautiful digital experiences",
-  },
-  {
     icon: PenTool,
-    title: "Illustration",
-    description: "Custom illustrations that bring stories to life",
+    title: "Photopea",
+    description: "Advanced photo editing and graphic design in the browser",
   },
   {
-    icon: Figma,
-    title: "Figma",
-    description: "Expert-level proficiency in modern design tools",
+    icon: Layout,
+    title: "Canva",
+    description: "Creating stunning designs with professional templates",
+  },
+  {
+    icon: Megaphone,
+    title: "Advertising",
+    description: "Strategic ad design that captures attention and drives results",
   },
   {
     icon: Brush,
