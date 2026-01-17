@@ -4,8 +4,7 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Mail, MapPin, Send, Instagram, Facebook, Linkedin, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-
-const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxpxo9Zqa86Kr0NPb9lieW692mqcVFv5xW3eBMS7g3zyAXI1l53ezkg2JFw8OOvIeRs/exec";
+import { supabase } from "@/integrations/supabase/client";
 
 const socialLinks = [
   { icon: Instagram, href: "https://www.instagram.com/dua_shafiq44", label: "Instagram" },
@@ -51,17 +50,11 @@ export function ContactSection() {
     setIsSubmitting(true);
 
     try {
-      await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          timestamp: new Date().toISOString(),
-        }),
+      const { data, error } = await supabase.functions.invoke("contact-form", {
+        body: formData,
       });
+
+      if (error) throw error;
 
       toast({
         title: "Message sent!",
@@ -70,6 +63,7 @@ export function ContactSection() {
 
       setFormData({ name: "", email: "", subject: "", message: "" });
     } catch (error) {
+      console.error("Contact form error:", error);
       toast({
         title: "Error",
         description: "Failed to send message. Please try again.",
