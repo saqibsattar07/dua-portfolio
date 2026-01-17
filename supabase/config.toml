@@ -2,3 +2,6 @@ project_id = "cwfvqtpslfjqhzzklghl"
 
 [functions.rag-chat]
 verify_jwt = false
+
+[functions.contact-form]
+verify_jwt = false
