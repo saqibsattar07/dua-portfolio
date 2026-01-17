@@ -77,16 +77,16 @@ export function Footer() {
                 <span className="text-muted-foreground text-sm">Brand Identity</span>
               </li>
               <li>
-                <span className="text-muted-foreground text-sm">UI/UX Design</span>
+                <span className="text-muted-foreground text-sm">Photopea</span>
               </li>
               <li>
-                <span className="text-muted-foreground text-sm">Print Design</span>
+                <span className="text-muted-foreground text-sm">Canva</span>
               </li>
               <li>
-                <span className="text-muted-foreground text-sm">Social Media Graphics</span>
+                <span className="text-muted-foreground text-sm">Advertising</span>
               </li>
               <li>
-                <span className="text-muted-foreground text-sm">Packaging Design</span>
+                <span className="text-muted-foreground text-sm">Adobe Suite</span>
               </li>
             </ul>
           </div>
