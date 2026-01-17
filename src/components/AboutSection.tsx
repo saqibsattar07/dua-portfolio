@@ -22,7 +22,7 @@ export function AboutSection() {
   }, []);
 
   return (
-    <section id="about" ref={sectionRef} className="py-24 md:py-32 relative overflow-hidden">
+    <section id="about" ref={sectionRef} className="pt-32 pb-24 md:pt-40 md:pb-32 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-secondary/20 to-transparent pointer-events-none" />
 
