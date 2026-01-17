@@ -32,7 +32,8 @@ export function Footer() {
               <img src={logo} alt="Dua Logo" className="h-12 w-auto" />
             </a>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-              Creative graphic designer passionate about crafting beautiful, meaningful designs that tell stories and connect brands with their audiences.
+              Creative graphic designer passionate about crafting beautiful, meaningful designs that tell stories and
+              connect brands with their audiences.
             </p>
             {/* Social Links */}
             <div className="flex gap-3">
@@ -72,11 +73,21 @@ export function Footer() {
           <div>
             <h4 className="font-display font-semibold text-foreground mb-6">Services</h4>
             <ul className="space-y-3">
-              <li><span className="text-muted-foreground text-sm">Brand Identity</span></li>
-              <li><span className="text-muted-foreground text-sm">UI/UX Design</span></li>
-              <li><span className="text-muted-foreground text-sm">Print Design</span></li>
-              <li><span className="text-muted-foreground text-sm">Social Media Graphics</span></li>
-              <li><span className="text-muted-foreground text-sm">Packaging Design</span></li>
+              <li>
+                <span className="text-muted-foreground text-sm">Brand Identity</span>
+              </li>
+              <li>
+                <span className="text-muted-foreground text-sm">UI/UX Design</span>
+              </li>
+              <li>
+                <span className="text-muted-foreground text-sm">Print Design</span>
+              </li>
+              <li>
+                <span className="text-muted-foreground text-sm">Social Media Graphics</span>
+              </li>
+              <li>
+                <span className="text-muted-foreground text-sm">Packaging Design</span>
+              </li>
             </ul>
           </div>
 
@@ -84,11 +95,14 @@ export function Footer() {
           <div>
             <h4 className="font-display font-semibold text-foreground mb-6">Get in Touch</h4>
             <ul className="space-y-4">
-          <li className="flex items-start gap-3">
+              <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm text-muted-foreground">Email</p>
-                  <a href="mailto:sduashah17@gmail.com" className="text-sm text-foreground hover:text-primary transition-colors">
+                  <a
+                    href="mailto:sduashah17@gmail.com"
+                    className="text-sm text-foreground hover:text-primary transition-colors"
+                  >
                     sduashah17@gmail.com
                   </a>
                 </div>
@@ -106,9 +120,7 @@ export function Footer() {
                 <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm text-muted-foreground">Location</p>
-                  <p className="text-sm text-foreground">
-                    Karachi, Pakistan
-                  </p>
+                  <p className="text-sm text-foreground">Karachi, Pakistan</p>
                 </div>
               </li>
             </ul>
@@ -121,10 +133,10 @@ export function Footer() {
         <div className="container mx-auto px-6 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-1 text-muted-foreground text-sm">
-              <span>© {new Date().getFullYear()} Syeda Dua Shah. Made with</span>
+              <span>© {new Date().getFullYear()} Syeda Dua Shah</span>
               <Heart className="w-4 h-4 text-primary fill-primary" />
             </div>
-            
+
             <div className="flex items-center gap-6">
               <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                 Privacy Policy
