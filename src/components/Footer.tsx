@@ -136,21 +136,13 @@ export function Footer() {
               <span>© {new Date().getFullYear()} Syeda Dua Shah</span>
             </div>
 
-            <div className="flex items-center gap-6">
-              <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Privacy Policy
-              </a>
-              <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Terms of Service
-              </a>
-              <button
-                onClick={scrollToTop}
-                className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
-                aria-label="Scroll to top"
-              >
-                <ArrowUp className="w-5 h-5" />
-              </button>
-            </div>
+            <button
+              onClick={scrollToTop}
+              className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+              aria-label="Scroll to top"
+            >
+              <ArrowUp className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </div>
