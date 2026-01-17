@@ -1,4 +1,4 @@
-import { Heart, Mail, Phone, MapPin, Instagram, Linkedin, Facebook, ArrowUp } from "lucide-react";
+import { Mail, Phone, MapPin, Instagram, Linkedin, Facebook, ArrowUp } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 const navLinks = [
@@ -134,7 +134,6 @@ export function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-1 text-muted-foreground text-sm">
               <span>© {new Date().getFullYear()} Syeda Dua Shah</span>
-              <Heart className="w-4 h-4 text-primary fill-primary" />
             </div>
 
             <div className="flex items-center gap-6">
