@@ -92,7 +92,7 @@ export function HeroSection() {
           {/* Main headline with typewriter */}
           <h1
             ref={headlineRef}
-            className="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-7xl leading-[1.1] mb-6 overflow-visible"
+            className="font-display font-extrabold text-5xl sm:text-6xl md:text-6xl lg:text-7xl leading-[1.1] mb-6 overflow-visible"
           >
             <span className="block text-foreground">Creative</span>
             <span className="block gradient-text animate-gradient bg-clip-text py-2 overflow-visible">
