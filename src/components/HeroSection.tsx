@@ -119,7 +119,7 @@ export function HeroSection() {
           >
             <Button
               size="lg"
-              className="gradient-bg text-primary-foreground font-semibold px-8 py-6 text-lg rounded-full hover-lift glow-effect"
+              className="gradient-bg text-primary-foreground font-semibold px-8 py-7 text-lg rounded-full hover-lift glow-effect"
               asChild
             >
               <a href="#work">View My Work</a>
