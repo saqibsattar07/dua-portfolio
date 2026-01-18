@@ -9,6 +9,13 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        silenceDeprecations: ['import'],
+      },
+    },
+  },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: {
